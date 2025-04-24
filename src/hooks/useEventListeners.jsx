@@ -4,6 +4,8 @@ import { queueMove } from "../stores/player";
 export default function useEventListeners() {
   useEffect(() => {
     const handleKeyDown = (event) => {
+      console.log(event.key);
+      
       if (event.key === "ArrowUp") {
         queueMove("forward");
       } else if (event.key === "ArrowDown") {

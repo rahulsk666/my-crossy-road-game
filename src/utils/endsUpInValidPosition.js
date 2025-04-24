@@ -1,6 +1,6 @@
 import { calculateFinalPosition } from "./calculateFinalPosition";
 import { minTileIndex, maxTileIndex } from "../constants";
-import { rows } from "../metadata";
+import useMapStore from "../stores/map";
 
 export function endsUpInValidPosition(currentPosition, moves) {
   // Calculate where the player would end up after the move
@@ -17,7 +17,7 @@ export function endsUpInValidPosition(currentPosition, moves) {
   }
 
   // Detect if we hit a tree
-  const finalRow = rows[finalPosition.rowIndex - 1];
+  const finalRow = useMapStore.getState().rows[finalPosition.rowIndex - 1];
   if (
     finalRow &&
     finalRow.type === "forest" &&

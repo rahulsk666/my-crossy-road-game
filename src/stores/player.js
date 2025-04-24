@@ -1,4 +1,6 @@
 import { endsUpInValidPosition } from "../utils/endsUpInValidPosition";
+import useMapStore from "./map";
+import useGameStore from "./game";
 
 export const state = {
   currentRow: 0,
@@ -25,8 +27,25 @@ export function stepCompleted() {
   if (direction === "backward") state.currentRow -= 1;
   if (direction === "left") state.currentTile -= 1;
   if (direction === "right") state.currentTile += 1;
+
+  // Add new rows if the player is running out of them
+  if (state.currentRow === useMapStore.getState().rows.length - 10) {
+    useMapStore.getState().addRows();
+  }
+  useGameStore.getState().updateScore(state.currentRow);
 }
 
 export function setRef(ref) {
-    state.ref = ref;
-  }
+  state.ref = ref;
+}
+
+export function reset() {
+  state.currentRow = 0;
+  state.currentTile = 0;
+  state.movesQueue = [];
+
+  if (!state.ref) return;
+  state.ref.position.x = 0;
+  state.ref.position.y = 0;
+  state.ref.children[0].rotation.z = 0;
+}

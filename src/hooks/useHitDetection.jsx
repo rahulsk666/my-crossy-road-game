@@ -1,8 +1,11 @@
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { state as player } from "../stores/player";
+import useGameStore from "../stores/game";
 
 export default function useHitDetection(vehicle, rowIndex) {
+  const endGame = useGameStore((state) => state.endGame);
+
   useFrame(() => {
     if (!vehicle.current) return;
     if (!player.ref) return;
@@ -19,8 +22,7 @@ export default function useHitDetection(vehicle, rowIndex) {
       playerBoundingBox.setFromObject(player.ref);
 
       if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
-        window.alert("Game over!");
-        window.location.reload();
+        endGame();
       }
     }
   });

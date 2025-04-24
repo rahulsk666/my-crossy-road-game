@@ -17,6 +17,7 @@ export default function usePlayerAnimation(ref) {
     const progress = Math.min(1, moveClock.getElapsedTime() / stepTime);
 
     setPosition(player, progress);
+    setRotation(player, progress);
 
     // Once a step has ended
     if (progress >= 1) {
@@ -39,5 +40,20 @@ function setPosition(player, progress) {
 
   player.position.x = THREE.MathUtils.lerp(startX, endX, progress);
   player.position.y = THREE.MathUtils.lerp(startY, endY, progress);
-  player.children[0].position.z = Math.sin(progress * Math.PI) * 8 + 10;
+  player.children[0].position.z = Math.sin(progress * Math.PI) * 8;
+  // player.children[0].position.z = Math.sin(progress * Math.PI) * 8 + 10;
+}
+
+function setRotation(player, progress) {
+  let endRotation = 0;
+  if (state.movesQueue[0] == "forward") endRotation = 0;
+  if (state.movesQueue[0] == "left") endRotation = Math.PI / 2;
+  if (state.movesQueue[0] == "right") endRotation = -Math.PI / 2;
+  if (state.movesQueue[0] == "backward") endRotation = Math.PI;
+
+  player.children[0].rotation.z = THREE.MathUtils.lerp(
+    player.children[0].rotation.z,
+    endRotation,
+    progress
+  );
 }
